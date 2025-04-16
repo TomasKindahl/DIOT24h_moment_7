@@ -116,6 +116,12 @@ void controlLed(BLEDevice peripheral) {
         if (IMU.gyroscopeAvailable()) {
             float x, y, z;
             IMU.readGyroscope(x, y, z);
+
+            /*Serial.print(x);
+            Serial.print(", ");
+            Serial.print(y);
+            Serial.print(", ");
+            Serial.println(z);*/
             gyroVal[0] = x;
             gyroVal[1] = y;
             gyroVal[2] = z;
@@ -123,9 +129,25 @@ void controlLed(BLEDevice peripheral) {
         else {
             for(int i = 0; i < 3; i++) gyroVal[i] = 0;
         }
-        
-        ledCharacteristic.writeValue(gyroVal,3*sizeof(float));
-        delay(1000);
+
+        if (oldButtonState != buttonState) {
+            // button changed
+            oldButtonState = buttonState;
+
+            if (buttonState) {
+                Serial.println("button pressed");
+
+                // button is pressed, write 0x01 to turn the LED on
+                gyroVal[0] = 1;
+                ledCharacteristic.writeValue(gyroVal,3*sizeof(float));
+            } else {
+                Serial.println("button released");
+
+                // button is released, write 0x00 to turn the LED off
+                gyroVal[0] = 0;
+                ledCharacteristic.writeValue(gyroVal,3*sizeof(float));
+            }
+        }
     }
 
     Serial.println("Peripheral disconnected");

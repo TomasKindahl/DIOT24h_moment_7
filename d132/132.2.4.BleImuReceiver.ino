@@ -80,6 +80,9 @@ void loop() {
                 }
                 Serial.println();
 
+                for(int i = 0; i < 3; i++)
+                    if(gyroVal[i] < 0)
+                        gyroVal[i] = -gyroVal[i];
                 int high = 0;
                 if(gyroVal[1] > gyroVal[high]) high = 1;
                 if(gyroVal[2] > gyroVal[high]) high = 2;
