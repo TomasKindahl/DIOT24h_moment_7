@@ -2,6 +2,9 @@
 
 import time
 from machine import LED
+ledr = LED("LED_RED")
+ledg = LED("LED_GREEN")
+ledb = LED("LED_BLUE")
 
 while True:
     ledr.on()
